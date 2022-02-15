@@ -11,6 +11,9 @@ const customerSchema = new mongoose.Schema({
     }],
     delivery_status: { type: Boolean, default: false },
     order_date: String
+},
+{
+    timestamps: true
 });
 
 module.exports = mongoose.model("customers", customerSchema);
