@@ -102,10 +102,29 @@ const deleteCustomer = async (req, res) => {
     }
 };
 
+const productWiseCustomer = async (req, res) => {
+    const details = req.body
+
+    await Customers.aggregate([
+        {
+            $unwind: "$products"
+        },
+        {
+            $match: { "products.product_name": details.product }
+        }
+    ], (err, data) => {
+        if(err) return res.json({ message: 'err' })
+
+        return res.json(data)
+    })
+
+}
+
 module.exports = {
     fetchCustomers,
     createCustomers,
     deleteCustomer,
     updateStock,
-    updateDeliveryStatus
+    updateDeliveryStatus,
+    productWiseCustomer
 };
