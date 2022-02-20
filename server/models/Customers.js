@@ -10,7 +10,8 @@ const customerSchema = new mongoose.Schema({
         order_quantity: Number
     }],
     delivery_status: { type: Boolean, default: false },
-    order_date: String
+    order_date: String,
+    order_month: String,
 },
 {
     timestamps: true

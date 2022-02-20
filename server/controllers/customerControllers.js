@@ -40,7 +40,8 @@ const createCustomers = async (req, res) => {
         customer_address: details.address,
         customer_number: details.contact,
         products: details.products,
-        order_date: details.orderdate
+        order_date: details.orderdate,
+        order_month: details.ordermonth
     });
 
     try {
@@ -120,11 +121,37 @@ const productWiseCustomer = async (req, res) => {
 
 }
 
+const userWiseCustomer = async (req, res) => {
+    const details = req.body
+
+    await Customers.aggregate([
+        {
+            $unwind: "$products"
+        },
+        {
+            $match: { "customer_name": details.customername }
+        }
+    ], (err, data) => {
+        if(err) return res.json({ message: 'err' })
+
+        return res.json(data)
+    })
+
+}
+
+const fetchCustomerNames = async (req, res) => {
+    const result = await Customers.distinct("customer_name")
+
+    return res.json(result)
+}
+
 module.exports = {
     fetchCustomers,
     createCustomers,
     deleteCustomer,
     updateStock,
     updateDeliveryStatus,
-    productWiseCustomer
+    productWiseCustomer,
+    userWiseCustomer,
+    fetchCustomerNames
 };
